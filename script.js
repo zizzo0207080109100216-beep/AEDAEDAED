@@ -1994,14 +1994,17 @@ const renderRegions = () => {
 const renderPrefectures = (region) => {
   prefectureList.innerHTML = "";
   prefectureHeading.textContent = `${region}の都道府県を選んでください`;
+
+  // ここを修正版に置き換える
   Object.keys(data[region]).forEach(prefecture => {
+    const cleanPref = prefecture.trim(); // ←ここでスペース除去
     const button = document.createElement("button");
     button.className = "prefecture-btn";
-    button.textContent = prefecture;
+    button.textContent = cleanPref;
     button.addEventListener("click", () => {
-      currentPrefecture = prefecture;
-      if (prefecture === "該当不明" || data[region][prefecture].length === 0) {
-        renderResult(prefecture, []);
+      currentPrefecture = cleanPref;
+      if (cleanPref === "該当不明" || data[region][prefecture].length === 0) {
+        renderResult(cleanPref, []);
         showScreen(resultScreen);
       } else {
         renderCities(region, prefecture);
@@ -2011,6 +2014,7 @@ const renderPrefectures = (region) => {
     prefectureList.appendChild(button);
   });
 };
+
 
 // 市区町村のボタンを生成する関数
 const renderCities = (region, prefecture) => {
