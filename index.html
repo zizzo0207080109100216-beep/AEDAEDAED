@@ -1,11 +1,85 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AED設置コンビニを探せ！</title>
+<style>
+  body {
+    font-family: sans-serif;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    background: #f4f4f4;
+  }
+  .container {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+  }
+  .screen {
+    display: none;
+  }
+  .screen.active {
+    display: block;
+  }
+  .big-btn, .small-btn {
+    display: inline-block;
+    padding: 15px 25px;
+    margin: 10px;
+    font-size: 20px;
+    background: #ff4c4c;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  .big-btn:hover, .small-btn:hover {
+    background: #e33;
+  }
+  .grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+  }
+  .grid button {
+    padding: 10px;
+    min-width: 100px;
+    background: #4caf50;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  .grid button:hover {
+    background: #3d8b40;
+  }
+  .footer {
+    margin-top: 20px;
+    font-size: 12px;
+    color: #666;
+  }
+  @media (max-width: 600px) {
+    .big-btn {
+      width: 90%;
+      font-size: 18px;
+    }
+    .grid button {
+      width: 90%;
+    }
+  }
+</style>
+</head>
+<body>
 <div id="game" class="container">
-  <section id="start-screen" class="screen">
+  <section id="start-screen" class="screen active">
     <h1 class="title">AED設置コンビニを探せ！</h1>
     <p class="subtitle">地域を選んで、AEDを置いているコンビニを見つけよう</p>
     <button id="start-btn" class="big-btn">スタート</button>
   </section>
 
-  <section id="region-screen" class="screen hidden">
+  <section id="region-screen" class="screen">
     <h2>地域を選んでください</h2>
     <div id="region-list" class="grid"></div>
     <div class="controls">
@@ -13,7 +87,7 @@
     </div>
   </section>
 
-  <section id="prefecture-screen" class="screen hidden">
+  <section id="prefecture-screen" class="screen">
     <h2 id="prefecture-heading">都道府県を選んでください</h2>
     <div id="prefecture-list" class="grid"></div>
     <div class="controls">
@@ -21,7 +95,7 @@
     </div>
   </section>
 
-  <section id="city-screen" class="screen hidden">
+  <section id="city-screen" class="screen">
     <h2 id="city-heading">市町村を選んでください</h2>
     <div id="city-list" class="grid"></div>
     <div class="controls">
@@ -29,7 +103,7 @@
     </div>
   </section>
 
-  <section id="result-screen" class="screen hidden">
+  <section id="result-screen" class="screen">
     <h2>AED設置コンビニ</h2>
     <p id="result-info"></p>
     <ul id="result-list" class="result-list"></ul>
@@ -43,3 +117,35 @@
     <small>データはユーザー提供のリストに基づく（該当不明は空）。拡張・更新可。</small>
   </footer>
 </div>
+
+<script>
+const screens = {
+  start: document.getElementById('start-screen'),
+  region: document.getElementById('region-screen'),
+  prefecture: document.getElementById('prefecture-screen'),
+  city: document.getElementById('city-screen'),
+  result: document.getElementById('result-screen')
+};
+
+const startBtn = document.getElementById('start-btn');
+const backRegionBtn = document.getElementById('back-from-region');
+const backPrefBtn = document.getElementById('back-from-pref');
+const backCityBtn = document.getElementById('back-from-city');
+const retryBtn = document.getElementById('retry-btn');
+
+function showScreen(screen) {
+  for (let key in screens) {
+    screens[key].classList.remove('active');
+  }
+  screens[screen].classList.add('active');
+}
+
+startBtn.addEventListener('click', () => showScreen('region'));
+startBtn.addEventListener('touchstart', () => showScreen('region'));
+backRegionBtn.addEventListener('click', () => showScreen('start'));
+backPrefBtn.addEventListener('click', () => showScreen('region'));
+backCityBtn.addEventListener('click', () => showScreen('prefecture'));
+retryBtn.addEventListener('click', () => showScreen('region'));
+</script>
+</body>
+</html>
